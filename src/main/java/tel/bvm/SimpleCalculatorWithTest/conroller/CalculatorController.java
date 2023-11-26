@@ -40,9 +40,4 @@ public class CalculatorController {
     public String divide(@RequestParam(value = "a", required = false) Float one, @RequestParam(value = "b", required = false) Float two) {
         return calculatorService.divide(one, two);
     }
-
-//    @GetMapping(path = "/divide")
-//    public String divide(@RequestParam Float one, @RequestParam Float two) {
-//        return calculatorService.divide(one, two);
-//    }
 }

@@ -60,27 +60,6 @@ public class CalculatorServiceImpl implements CalculatorService {
         }
     }
 
-//    if (Float.isInfinite(value) || Float.isNaN(value)) {
-//        // значение вышло за границы допустимых значений
-//    } else {
-//        // допустимое значение
-//    }
-//    @Override
-//    public String divide(Float one, Float two) {
-//        boolean twoTestZero = two == 0;
-//
-//        if (!noNullConfirmed(one, two)) {
-//            return nullMessage();
-//
-//        } else {
-//            if (!twoTestZero) {
-//                return one + " / " + two + " = " + (one / two);
-//            } else {
-//                return divisorZeroMessage();
-//            }
-//        }
-//    }
-
     @Override
     public String divide(Float one, Float two) {
         boolean twoTestZero = two == 0;
@@ -91,7 +70,6 @@ public class CalculatorServiceImpl implements CalculatorService {
             if (!twoTestZero) {
                 return one + " / " + two + " = " + (one / two);
             } else {
-//                return divisorZeroMessage();
                 throw new IllegalArgumentException(divisorZeroMessage());
             }
         }

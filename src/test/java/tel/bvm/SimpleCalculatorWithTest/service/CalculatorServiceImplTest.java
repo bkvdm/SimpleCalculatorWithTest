@@ -52,13 +52,13 @@ public class CalculatorServiceImplTest {
     @ParameterizedTest
     @CsvSource(value = {"2, 3, 2.0 + 3.0 = 5.0", "1.05, 3.45, 1.05 + 3.45 = 4.5"})
     void plusPositive(Float one, Float two, String resultExcepted) {
-         assertEquals(resultExcepted, calculatorService.plus(one, two));
+        assertEquals(resultExcepted, calculatorService.plus(one, two));
     }
 
     @ParameterizedTest
     @CsvSource(value = {"200, 300, 200.0 - 300.0 = -100.0", "100.05, 300.45, 100.05 - 300.45 = -200.40001"})
     void minusPositive(Float one, Float two, String resultExcepted) {
-         assertEquals(resultExcepted, calculatorService.minus(one, two));
+        assertEquals(resultExcepted, calculatorService.minus(one, two));
     }
 
     @ParameterizedTest
