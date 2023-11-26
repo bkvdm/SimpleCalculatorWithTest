@@ -15,6 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CalculatorServiceImplTest {
 
+    public static Float variableValuer() {
+        java.util.Random random = new java.util.Random();
+        Float minimumScore = Float.MIN_VALUE;
+        return random.nextFloat(Float.MAX_VALUE) + minimumScore;
+    }
+
     private final CalculatorService calculatorService = new CalculatorServiceImpl();
 
     public static Stream<Arguments> positivePlusVariations() {
@@ -23,12 +29,12 @@ public class CalculatorServiceImplTest {
         );
     }
 
-    public static Stream<Arguments> divisorZeroMessage() {
-        return Stream.of(Arguments.of(Float.MAX_VALUE, 0F, "Значение делителя равен нулю. На ноль делить нельзя"));
-    }
-
-    public static Stream<Arguments> nullMessage() {
-        return Stream.of(Arguments.of(Float.MAX_VALUE, null, "Одно из введённых значений выражения пустое. Для расчёта нужны два значения переменных"));
+    public static Stream<Arguments> positiveMultiplyVariations() {
+        Float one = variableValuer();
+        Float two = variableValuer();
+        Float meaning = one + two;
+        String result = one + " * " + two + " = " + meaning;
+        return Stream.of(Arguments.of(one, two, result));
     }
 
     @Test
@@ -50,21 +56,21 @@ public class CalculatorServiceImplTest {
     }
 
     @ParameterizedTest
+    @CsvSource(value = {"200, 300, 200.0 - 300.0 = -100.0", "100.05, 300.45, 100.05 - 300.45 = -200.40001"})
+    void minusPositive(Float a, Float b, String resultExcepted) {
+         assertEquals(resultExcepted, calculatorService.minus(a, b));
+    }
+
+    @ParameterizedTest
     @MethodSource("positivePlusVariations")
     void plusPositiveMethod(Float a, Float b, String expected) {
         assertEquals(expected, calculatorService.plus(a, b));
     }
 
     @ParameterizedTest
-    @MethodSource("divisorZeroMessage")
-    void divisorZeroMessage(Float a, Float b, String expected) {
-        assertEquals(expected, calculatorService.divide(a, b));
-    }
-
-    @ParameterizedTest
-    @MethodSource("nullMessage")
-    void nullMessage(Float a, Float b, String expected) {
-        assertEquals(expected, calculatorService.divide(a, b));
+    @MethodSource("positiveMultiplyVariations")
+    void multiplyPositiveMethod(Float one, Float two, String expected) {
+        assertEquals(expected, calculatorService.multiply(one, two));
     }
 
     @Test
@@ -73,7 +79,67 @@ public class CalculatorServiceImplTest {
     }
 
     @Test
+    void plusByNull() {
+        assertThrows(NullPointerException.class, () -> calculatorService.plus(Float.MAX_VALUE, null));
+    }
+
+    @Test
+    void plusByNullSecond() {
+        assertThrows(NullPointerException.class, () -> calculatorService.plus(null, Float.MAX_VALUE));
+    }
+
+    @Test
+    void plusByNullAllNull() {
+        assertThrows(IllegalArgumentException.class, () -> calculatorService.plus(null, null));
+    }
+
+    @Test
+    void minusByNull() {
+        assertThrows(NullPointerException.class, () -> calculatorService.minus(Float.MAX_VALUE, null));
+    }
+
+    @Test
+    void minusByNullSecond() {
+        assertThrows(NullPointerException.class, () -> calculatorService.minus(null, Float.MAX_VALUE));
+    }
+
+    @Test
+    void minusByNullAllNull() {
+        assertThrows(IllegalArgumentException.class, () -> calculatorService.minus(null, null));
+    }
+
+    @Test
+    void multiplyByNull() {
+        assertThrows(NullPointerException.class, () -> calculatorService.multiply(Float.MAX_VALUE, null));
+    }
+
+    @Test
+    void multiplyByNullSecond() {
+        assertThrows(NullPointerException.class, () -> calculatorService.multiply(null, Float.MAX_VALUE));
+    }
+
+    @Test
+    void multiplyByNullAllNull() {
+        assertThrows(IllegalArgumentException.class, () -> calculatorService.multiply(null, null));
+    }
+
+    @Test
     void divideByNull() {
         assertThrows(NullPointerException.class, () -> calculatorService.divide(Float.MAX_VALUE, null));
+    }
+
+    @Test
+    void divideByNullSecond() {
+        assertThrows(IllegalArgumentException.class, () -> calculatorService.divide(null, Float.MAX_VALUE));
+    }
+
+    @Test
+    void divideByNullAllNull() {
+        assertThrows(IllegalArgumentException.class, () -> calculatorService.divide(null, Float.MAX_VALUE));
+    }
+
+    @Test
+    void goingBeyond() {
+        assertThrows(IllegalArgumentException.class, () -> calculatorService.multiply(Float.MAX_VALUE, Float.MAX_VALUE));
     }
 }

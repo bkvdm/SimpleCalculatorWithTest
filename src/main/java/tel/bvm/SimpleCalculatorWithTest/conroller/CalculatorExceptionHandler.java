@@ -14,4 +14,18 @@ public class CalculatorExceptionHandler {
         response.setStatus(400);
         return e.getMessage();
     }
+
+    @ExceptionHandler
+    @ResponseBody
+    public String zeroMessage(IllegalArgumentException e, HttpServletResponse response) {
+        response.setStatus(400);
+        return e.getMessage();
+    }
+
+    @ExceptionHandler
+    @ResponseBody
+    public String goingBeyond(IllegalArgumentException e, HttpServletResponse response) {
+        response.setStatus(400);
+        return e.getMessage();
+    }
 }
