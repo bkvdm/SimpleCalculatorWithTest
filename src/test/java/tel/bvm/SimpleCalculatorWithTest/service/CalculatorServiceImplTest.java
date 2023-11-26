@@ -17,8 +17,8 @@ public class CalculatorServiceImplTest {
 
     public static Float variableValuer() {
         java.util.Random random = new java.util.Random();
-        Float minimumScore = Float.MIN_VALUE;
-        return random.nextFloat(Float.MAX_VALUE) + minimumScore;
+        Float minimumScore = -100F;
+        return random.nextFloat(100F) + minimumScore;
     }
 
     private final CalculatorService calculatorService = new CalculatorServiceImpl();
@@ -32,7 +32,7 @@ public class CalculatorServiceImplTest {
     public static Stream<Arguments> positiveMultiplyVariations() {
         Float one = variableValuer();
         Float two = variableValuer();
-        Float meaning = one + two;
+        Float meaning = one * two;
         String result = one + " * " + two + " = " + meaning;
         return Stream.of(Arguments.of(one, two, result));
     }
@@ -51,26 +51,32 @@ public class CalculatorServiceImplTest {
 
     @ParameterizedTest
     @CsvSource(value = {"2, 3, 2.0 + 3.0 = 5.0", "1.05, 3.45, 1.05 + 3.45 = 4.5"})
-    void plusPositive(Float a, Float b, String resultExcepted) {
-         assertEquals(resultExcepted, calculatorService.plus(a, b));
+    void plusPositive(Float one, Float two, String resultExcepted) {
+         assertEquals(resultExcepted, calculatorService.plus(one, two));
     }
 
     @ParameterizedTest
     @CsvSource(value = {"200, 300, 200.0 - 300.0 = -100.0", "100.05, 300.45, 100.05 - 300.45 = -200.40001"})
-    void minusPositive(Float a, Float b, String resultExcepted) {
-         assertEquals(resultExcepted, calculatorService.minus(a, b));
+    void minusPositive(Float one, Float two, String resultExcepted) {
+         assertEquals(resultExcepted, calculatorService.minus(one, two));
     }
 
     @ParameterizedTest
     @MethodSource("positivePlusVariations")
-    void plusPositiveMethod(Float a, Float b, String expected) {
-        assertEquals(expected, calculatorService.plus(a, b));
+    void plusPositiveMethod(Float one, Float two, String expected) {
+        assertEquals(expected, calculatorService.plus(one, two));
     }
 
     @ParameterizedTest
     @MethodSource("positiveMultiplyVariations")
     void multiplyPositiveMethod(Float one, Float two, String expected) {
         assertEquals(expected, calculatorService.multiply(one, two));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"2, 3, 2.0 * 3.0 = 6.0", "10.01, 3.15, 10.01 * 3.15 = 31.531502"})
+    void multiplyPositive(Float one, Float two, String resultExcepted) {
+        assertEquals(resultExcepted, calculatorService.multiply(one, two));
     }
 
     @Test
